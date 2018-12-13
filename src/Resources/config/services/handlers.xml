@@ -8,6 +8,7 @@
         <import resource="handler/address_book.xml"/>
         <import resource="handler/cart.xml"/>
         <import resource="handler/customer.xml"/>
+        <import resource="handler/order.xml"/>
         <import resource="handler/product.xml"/>
     </imports>
 

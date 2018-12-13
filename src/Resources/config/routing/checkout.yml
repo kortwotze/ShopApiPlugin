@@ -39,3 +39,9 @@ sylius_shop_api_complete_checkout:
     methods: [PUT]
     defaults:
         _controller: sylius.shop_api_plugin.controller.checkout.complete_order_action
+
+sylius_shop_api_checkout_pay:
+    path: /{token}/pay/{paymentId}
+    methods: [PUT]
+    defaults:
+        _controller: sylius.shop_api_plugin.controller.checkout.pay_payment_action

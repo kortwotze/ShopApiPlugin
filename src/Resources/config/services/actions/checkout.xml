@@ -45,5 +45,13 @@
             <argument type="service" id="tactician.commandbus" />
             <argument type="service" id="security.token_storage" />
         </service>
+        <service id="sylius.shop_api_plugin.controller.checkout.pay_payment_action"
+                 class="Sylius\ShopApiPlugin\Controller\Checkout\PayPaymentAction"
+        >
+            <argument type="service" id="fos_rest.view_handler"/>
+            <argument type="service" id="tactician.commandbus"/>
+            <argument type="service" id="sylius.shop_api_plugin.provider.logged_in_user_provider"/>
+            <argument type="service" id="sylius.email_sender"/>
+        </service>
     </services>
 </container>
