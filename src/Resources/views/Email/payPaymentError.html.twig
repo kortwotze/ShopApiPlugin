@@ -1,0 +1,9 @@
+{% block subject %}
+    Error while completing payment for order {{ order.number }}
+{% endblock %}
+
+{% block body %}
+    {% autoescape %}
+        Completing payment {{ payment.id }} failed with: {{ message }}
+    {% endautoescape %}
+{% endblock %}

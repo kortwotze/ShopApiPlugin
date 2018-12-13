@@ -11,6 +11,7 @@ use FOS\RestBundle\View\ViewHandlerInterface;
 use League\Tactician\CommandBus;
 use spec\Sylius\Bundle\ResourceBundle\Controller\ViewHandlerSpec;
 use Sylius\Component\Mailer\Sender\SenderInterface;
+use Sylius\ShopApiPlugin\Exceptions\PaymentPaidException;
 use Sylius\ShopApiPlugin\Mailer\Emails;
 use Sylius\ShopApiPlugin\Provider\LoggedInUserProviderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -72,8 +73,12 @@ final class PayPaymentAction
                     $request->attributes->get('paymentId')
                 )
             );
-        } catch (\Throwable $throwable) {
-            $this->sender->send(Emails::EMAIL_PAY_PAYMENT_ERROR, ' developer@brille24.de', $throwable->getMessage());
+        } catch (PaymentPaidException $paymentPaidException) {
+            $this->sender->send(
+                Emails::EMAIL_PAY_PAYMENT_ERROR,
+                'developer@brille24.de',
+                ['order' => $paymentPaidException->getOrder(), 'payment' => $paymentPaidException->getPayment()]
+            );
         }
 
         return $this->viewHandler->handle(View::create(null, Response::HTTP_NO_CONTENT));
