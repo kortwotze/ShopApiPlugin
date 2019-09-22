@@ -1,0 +1,170 @@
+{
+  "manage-address-book" : {
+  "get" : {
+    "tags" : [ "address" ],
+    "summary" : "Gets the address book of the currently logged in user",
+    "operationId" : "addressBook",
+    "parameters" : [ ],
+    "responses" : {
+      "200" : {
+        "description" : "Successfully fetched Address Book",
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/LoggedInCustomerAddressBook"
+        }
+      },
+      "500" : {
+        "description" : "User not logged in"
+      }
+    },
+    "security" : [ {
+      "bearerAuth" : [ ]
+    } ]
+  },
+  "post" : {
+    "tags" : [ "address" ],
+    "summary" : "Creates a new address in the the address book",
+    "operationId" : "createAddress",
+    "parameters" : [ {
+      "in" : "body",
+      "name" : "content",
+      "required" : true,
+      "schema" : {
+        "$ref" : "../definitions/definitions.swagger.json#/LoggedInCustomerAddressBookAddress"
+      }
+    } ],
+    "responses" : {
+      "201" : {
+        "description" : "Successfully created the address",
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/LoggedInCustomerAddressBookAddress"
+        }
+      },
+      "400" : {
+        "description" : "Validation failed",
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+        }
+      },
+      "401" : {
+        "description" : "No user is logged in"
+      },
+      "500" : {
+        "description" : "The user does not own the address"
+      }
+    },
+    "security" : [ {
+      "bearerAuth" : [ ]
+    } ]
+  }
+},
+  "manage-address-in-address-book-by-id" : {
+    "put" : {
+      "tags" : [ "address" ],
+      "summary" : "Updates an address in the address book",
+      "operationId" : "updateAddressBook",
+      "parameters" : [ {
+        "name" : "id",
+        "in" : "path",
+        "description" : "Id of the address to update",
+        "required" : true,
+        "type" : "integer"
+      }, {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/LoggedInCustomerAddressBookAddress"
+        }
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "Successfully updated the address",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/LoggedInCustomerAddressBookAddress"
+          }
+        },
+        "400" : {
+          "description" : "Validation failed",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        },
+        "401" : {
+          "description" : "No user is logged in"
+        },
+        "500" : {
+          "description" : "The user does not own the address"
+        }
+      },
+      "security" : [ {
+        "bearerAuth" : [ ]
+      } ]
+    },
+    "delete" : {
+      "tags" : [ "address" ],
+      "summary" : "Deletes an address from the address book",
+      "operationId" : "deleteAddress",
+      "parameters" : [ {
+        "name" : "id",
+        "in" : "path",
+        "description" : "Id of the address to update",
+        "required" : true,
+        "type" : "integer"
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Successfully removed the address"
+        },
+        "400" : {
+          "description" : "Validation failed",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        },
+        "401" : {
+          "description" : "No user is logged in"
+        },
+        "500" : {
+          "description" : "The user does not own the address"
+        }
+      },
+      "security" : [ {
+        "bearerAuth" : [ ]
+      } ]
+    }
+  },
+  "set-address-as-default-in-address-book" : {
+    "patch" : {
+      "tags" : [ "address" ],
+      "summary" : "Change the default address in the address book",
+      "operationId" : "updateDefaultAddress",
+      "parameters" : [ {
+        "name" : "id",
+        "in" : "path",
+        "description" : "Id of the address to be the default address",
+        "required" : true,
+        "type" : "integer"
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Successfully updated the address"
+        },
+        "400" : {
+          "description" : "Validation failed",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        },
+        "401" : {
+          "description" : "No user is logged in"
+        },
+        "500" : {
+          "description" : "The user does not own the address"
+        }
+      },
+      "security" : [ {
+        "bearerAuth" : [ ]
+      } ]
+    }
+  }
+}

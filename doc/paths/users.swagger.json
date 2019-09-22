@@ -1,0 +1,157 @@
+{
+  "request-password-reset" : {
+    "put" : {
+      "tags" : [ "users" ],
+      "summary" : "Request resetting password of user with passed email.",
+      "description" : "Email with reset password path will be sent to user. Default path for password resetting is `/password-reset/{token}`. To change it, you need to override template `@SyliusShopApi\\Email\\passwordReset.html.twig`.",
+      "operationId" : "requestPasswordReset",
+      "parameters" : [ {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/RequestPasswordResetting"
+        }
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Reset password request has been sent."
+        },
+        "500" : {
+          "description" : "User with provided email has not been found."
+        }
+      }
+    }
+  },
+  "reset-password-with-token" : {
+    "put" : {
+      "tags" : [ "users" ],
+      "summary" : "Password reset.",
+      "description" : "This endpoint resets the user password.",
+      "operationId" : "passwordReset",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Password reset token.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/PasswordResetRequest"
+        }
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Update password request success."
+        },
+        "400" : {
+          "description" : "Token not found."
+        }
+      }
+    }
+  },
+  "register" : {
+    "post" : {
+      "tags" : [ "users" ],
+      "summary" : "Registering a new user",
+      "description" : "This creates a new user that can log in the shop",
+      "operationId" : "registerUser",
+      "parameters" : [ {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/RegisterRequest"
+        }
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "The user was successfully created"
+        },
+        "400" : {
+          "description" : "There were validation errors"
+        },
+        "500" : {
+          "description" : "Channel not found"
+        }
+      }
+    }
+  },
+  "login" : {
+    "post" : {
+      "tags" : [ "users" ],
+      "summary" : "Logs the user in and returns the token",
+      "description" : "This route is needed to log the user in and get an access token.",
+      "operationId" : "loginUser",
+      "consumes" : [ "application/json" ],
+      "parameters" : [ {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/LoginRequest"
+        }
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "User was logged in",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/LoginSuccess"
+          }
+        }
+      }
+    }
+  },
+  "me" : {
+    "get" : {
+      "tags" : [ "users" ],
+      "summary" : "Provides currently logged in user details.",
+      "operationId" : "me",
+      "parameters" : [ ],
+      "responses" : {
+        "200" : {
+          "description" : "Provides currently logged in user details.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/LoggedInCustomerDetails"
+          }
+        },
+        "401" : {
+          "description" : "User token invalid"
+        }
+      },
+      "security" : [ {
+        "bearerAuth" : [ ]
+      } ]
+    },
+    "put" : {
+      "tags" : [ "users" ],
+      "summary" : "Updates currently logged in users details.",
+      "operationId" : "updateUser",
+      "parameters" : [ {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/UpdateUserRequest"
+        }
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "User successfully updated.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/LoggedInCustomerDetails"
+          }
+        },
+        "401" : {
+          "description" : "User token invalid"
+        }
+      },
+      "security" : [ {
+        "bearerAuth" : [ ]
+      } ]
+    }
+  }
+}

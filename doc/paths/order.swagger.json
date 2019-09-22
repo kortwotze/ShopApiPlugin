@@ -1,0 +1,70 @@
+{
+  "get-orders" : {
+    "get" : {
+      "tags" : [ "order" ],
+      "summary" : "Shows a list of orders of the customer",
+      "operationId" : "orders",
+      "parameters" : [ {
+        "name" : "channelCode",
+        "in" : "path",
+        "description" : "The request channel code",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "Shows a list of placed orders of the customer",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "../definitions/definitions.swagger.json#/PlacedOrder"
+            }
+          }
+        },
+        "401" : {
+          "description" : "User token invalid"
+        }
+      },
+      "security" : [ {
+        "bearerAuth" : [ ]
+      } ]
+    }
+  },
+  "get-order-by-token" : {
+    "get" : {
+      "tags" : [ "order" ],
+      "summary" : "Shows details of specific customer's order",
+      "operationId" : "order",
+      "parameters" : [ {
+        "name" : "channelCode",
+        "in" : "path",
+        "description" : "The request channel code",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "name" : "tokenValue",
+        "in" : "path",
+        "description" : "Order token.",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "Shows details of specific customer's order with given tokenValue",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/PlacedOrder"
+          }
+        },
+        "401" : {
+          "description" : "User token invalid"
+        },
+        "404" : {
+          "description" : "Order with given tokenValue not found"
+        }
+      },
+      "security" : [ {
+        "bearerAuth" : [ ]
+      } ]
+    }
+  }
+}

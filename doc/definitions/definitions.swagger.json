@@ -1,0 +1,1056 @@
+{
+  "AddReviewRequest" : {
+    "type" : "object",
+    "required" : [ "comment", "email", "rating", "title" ],
+    "properties" : {
+      "title" : {
+        "type" : "string",
+        "example" : "Awesome product"
+      },
+      "rating" : {
+        "type" : "integer",
+        "example" : 5
+      },
+      "comment" : {
+        "type" : "string",
+        "example" : "If I were a mug, I would like to be like this one!"
+      },
+      "email" : {
+        "type" : "string",
+        "example" : "customer@example.com",
+        "description" : "Email of an author."
+      }
+    },
+    "description" : "Body of request with a channel code."
+  },
+  "PutItemToCartRequest" : {
+    "type" : "object",
+    "required" : [ "productCode" ],
+    "properties" : {
+      "productCode" : {
+        "type" : "string",
+        "example" : "LOGANHAT_CODE"
+      },
+      "quantity" : {
+        "type" : "integer",
+        "example" : 3,
+        "minimum" : 1
+      },
+      "variantCode" : {
+        "type" : "string",
+        "example" : "SMALL_LOGAN_T_SHIRT_CODE"
+      },
+      "options" : {
+        "type" : "object",
+        "description" : "Keys reference to the code of an option and values to the code of option value.",
+        "additionalProperties" : {
+          "type" : "string",
+          "example" : "HAT_SIZE_S"
+        }
+      }
+    },
+    "description" : "Body of request used to put item to the cart."
+  },
+  "PutItemsToCartRequest" : {
+    "type" : "array",
+    "description" : "Body of request used to put item to the cart.",
+    "items" : {
+      "$ref" : "#/PutItemToCartRequest"
+    }
+  },
+  "ChangeItemQuantityRequest" : {
+    "type" : "object",
+    "required" : [ "quantity" ],
+    "properties" : {
+      "quantity" : {
+        "type" : "integer",
+        "example" : 2
+      }
+    },
+    "description" : "Body of request used to change quantity of an item."
+  },
+  "AddCouponRequest" : {
+    "type" : "object",
+    "required" : [ "coupon" ],
+    "properties" : {
+      "coupon" : {
+        "type" : "string",
+        "example" : "BANANAS"
+      }
+    },
+    "description" : "Body of request used to add promotion coupon code to cart."
+  },
+  "CheckoutAddressRequest" : {
+    "type" : "object",
+    "required" : [ "shippingAddress" ],
+    "properties" : {
+      "shippingAddress" : {
+        "$ref" : "#/Address"
+      },
+      "billingAddress" : {
+        "$ref" : "#/Address"
+      }
+    },
+    "description" : "Body of request used for cart addressing."
+  },
+  "CheckoutChooseShippingMethodRequest" : {
+    "type" : "object",
+    "required" : [ "method" ],
+    "properties" : {
+      "method" : {
+        "type" : "string",
+        "example" : "DHL",
+        "description" : "Code of chosen shipping method."
+      }
+    },
+    "description" : "Body of request used to choose shipping method."
+  },
+  "CheckoutChoosePaymentMethodRequest" : {
+    "type" : "object",
+    "required" : [ "method" ],
+    "properties" : {
+      "method" : {
+        "type" : "string",
+        "example" : "PBC",
+        "description" : "Code of chosen payment method."
+      }
+    },
+    "description" : "Body of request used to choose payment method."
+  },
+  "CheckoutCompleteRequest" : {
+    "type" : "object",
+    "required" : [ "email" ],
+    "properties" : {
+      "email" : {
+        "type" : "string",
+        "example" : "customer@example.com",
+        "description" : "Email of a customer."
+      },
+      "notes" : {
+        "type" : "string",
+        "example" : "I'm only available between 3 and 8 PM.",
+        "description" : "Additional notes."
+      }
+    },
+    "description" : "Body of request used to complete checkout."
+  },
+  "AvailableShippingMethods" : {
+    "type" : "object",
+    "properties" : {
+      "shipments" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/AvailableShippingMethods_shipments"
+        }
+      }
+    },
+    "description" : "Available shipping methods for each shipment."
+  },
+  "Shipment" : {
+    "type" : "object",
+    "properties" : {
+      "state" : {
+        "type" : "string",
+        "description" : "Current state of a shipment.",
+        "enum" : [ "cart", "ready", "cancelled", "shipped" ],
+        "default" : "cart"
+      },
+      "method" : {
+        "$ref" : "#/ShippingMethod"
+      }
+    }
+  },
+  "AvailablePaymentMethods" : {
+    "type" : "object",
+    "properties" : {
+      "payments" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/AvailablePaymentMethods_payments"
+        }
+      }
+    },
+    "description" : "Available payment methods for each payment."
+  },
+  "Payment" : {
+    "type" : "object",
+    "properties" : {
+      "state" : {
+        "type" : "string",
+        "description" : "Current state of a payment.",
+        "enum" : [ "cart", "new", "processing", "completed", "failed", "cancelled", "refunded" ],
+        "default" : "cart"
+      },
+      "method" : {
+        "$ref" : "#/PaymentMethod"
+      }
+    }
+  },
+  "Cart" : {
+    "type" : "object",
+    "properties" : {
+      "tokenValue" : {
+        "type" : "string",
+        "example" : "SDAOSLEFNWU35H3QLI5325"
+      },
+      "channel" : {
+        "type" : "string",
+        "example" : "WEB_GB"
+      },
+      "currency" : {
+        "type" : "string",
+        "example" : "GBP",
+        "description" : "Code of the cart currency according to ISO 4217. This value is inherited from channel"
+      },
+      "locale" : {
+        "type" : "string",
+        "example" : "en_GB",
+        "description" : "Code of the cart locale. This value is inherited from channel"
+      },
+      "checkoutState" : {
+        "type" : "string",
+        "description" : "Current state of a checkout.",
+        "enum" : [ "cart", "addressed", "shipping_selected", "payment_selected", "completed" ],
+        "default" : "cart"
+      },
+      "items" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/Item"
+        }
+      },
+      "totals" : {
+        "$ref" : "#/TotalsView"
+      },
+      "shippingAddress" : {
+        "$ref" : "#/Address"
+      },
+      "billingAddress" : {
+        "$ref" : "#/Address"
+      },
+      "payments" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/Payment"
+        }
+      },
+      "shipments" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/Shipment"
+        }
+      },
+      "cartDiscounts" : {
+        "type" : "array",
+        "items" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/Discount"
+          }
+        }
+      },
+      "couponCode" : {
+        "type" : "string",
+        "example" : "LD11FA",
+        "description" : "Code of the coupon that is associated with this cart"
+      }
+    },
+    "description" : "Cart with information about items, current state, totals and more."
+  },
+  "Item" : {
+    "type" : "object",
+    "properties" : {
+      "id" : {
+        "type" : "integer",
+        "example" : 1
+      },
+      "quantity" : {
+        "type" : "integer",
+        "example" : 2
+      },
+      "total" : {
+        "type" : "integer",
+        "example" : 1000
+      },
+      "product" : {
+        "$ref" : "#/Product"
+      }
+    },
+    "description" : "Item with calculated prices, quantity and related product."
+  },
+  "Image" : {
+    "type" : "object",
+    "properties" : {
+      "code" : {
+        "type" : "string",
+        "example" : "thumbnail"
+      },
+      "path" : {
+        "type" : "string",
+        "example" : "/uo/mug.jpg"
+      }
+    }
+  },
+  "Variant" : {
+    "type" : "object",
+    "properties" : {
+      "code" : {
+        "type" : "string",
+        "example" : "LOGAN_MUG_CODE"
+      },
+      "name" : {
+        "type" : "string",
+        "example" : "Logan Mug"
+      },
+      "axis" : {
+        "type" : "array",
+        "description" : "List of codes of associated product options.",
+        "items" : {
+          "type" : "string",
+          "example" : "HAT_SIZE_S"
+        }
+      },
+      "nameAxis" : {
+        "type" : "object",
+        "description" : "Map of keys from previous field to translated values of given variant.",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      },
+      "onHand" : {
+        "type" : "integer",
+        "example" : 12
+      },
+      "price" : {
+        "$ref" : "#/Price"
+      },
+      "originalPrice" : {
+        "$ref" : "#/Price"
+      },
+      "images" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/Image"
+        }
+      }
+    },
+    "description" : "If the product is simple it will have only one variant with the same code and name. Otherwise, the product can have a list of variants with different fields."
+  },
+  "Attribute" : {
+    "type" : "object",
+    "properties" : {
+      "code" : {
+        "type" : "string",
+        "example" : "MUG_MATERIAL_CODE"
+      },
+      "name" : {
+        "type" : "string",
+        "example" : "Mug material"
+      },
+      "value" : {
+        "type" : "string",
+        "example" : "Wood"
+      }
+    }
+  },
+  "Taxon" : {
+    "type" : "object",
+    "properties" : {
+      "code" : {
+        "type" : "string",
+        "example" : "CATEGORIES_CODE"
+      },
+      "name" : {
+        "type" : "string",
+        "example" : "Categories"
+      },
+      "slug" : {
+        "type" : "string",
+        "example" : "categories"
+      },
+      "description" : {
+        "type" : "string",
+        "example" : "General category for all products."
+      },
+      "children" : {
+        "type" : "array",
+        "description" : "Based on this tree one can build a breadcrumb on a frontend. Otherwise (e.g. presenting a tree of all taxons) children will contain all children of given taxon.",
+        "items" : {
+          "$ref" : "#/Taxon"
+        }
+      },
+      "images" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/Image"
+        }
+      }
+    }
+  },
+  "TaxonDetails" : {
+    "type" : "object",
+    "properties" : {
+      "self" : {
+        "$ref" : "#/Taxon"
+      },
+      "parentTree" : {
+        "$ref" : "#/Taxon"
+      }
+    }
+  },
+  "ProductTaxon" : {
+    "type" : "object",
+    "properties" : {
+      "main" : {
+        "type" : "string",
+        "example" : "MAIN_TAXON_CODE"
+      },
+      "others" : {
+        "type" : "array",
+        "items" : {
+          "type" : "string",
+          "example" : "OTHER_TAXON_CODE"
+        }
+      }
+    }
+  },
+  "Discount" : {
+    "type" : "object",
+    "properties" : {
+      "name" : {
+        "type" : "string",
+        "example" : "Summer sale",
+        "description" : "Name of promotion."
+      },
+      "amount" : {
+        "$ref" : "#/Price"
+      }
+    }
+  },
+  "ProductsPage" : {
+    "allOf" : [ {
+      "$ref" : "../swagger.json#/definitions/Page"
+    }, {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/Product"
+          }
+        }
+      }
+    } ]
+  },
+  "Product" : {
+    "type" : "object",
+    "properties" : {
+      "code" : {
+        "type" : "string",
+        "example" : "LOGAN_MUG_CODE"
+      },
+      "name" : {
+        "type" : "string",
+        "example" : "Logan Mug"
+      },
+      "slug" : {
+        "type" : "string",
+        "example" : "logan-mug"
+      },
+      "averageRating" : {
+        "type" : "string",
+        "example" : "4.5"
+      },
+      "taxons" : {
+        "$ref" : "#/ProductTaxon"
+      },
+      "variants" : {
+        "type" : "object",
+        "description" : "Keys reference to code of a variant.",
+        "additionalProperties" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/Variant"
+          }
+        }
+      },
+      "attributes" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/Attribute"
+        }
+      },
+      "associations" : {
+        "type" : "object",
+        "description" : "Keys reference to code of an association.",
+        "additionalProperties" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/Product"
+          }
+        }
+      },
+      "images" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/Image"
+        }
+      }
+    },
+    "description" : "Product with its basic information, variants, attributes, association and images."
+  },
+  "ProductDetails" : {
+    "allOf" : [ {
+      "$ref" : "../swagger.json#/definitions/Product"
+    }, {
+      "type" : "object",
+      "properties" : {
+        "breadcrumb" : {
+          "type" : "string",
+          "example" : "categories/mugs/logan-mug"
+        }
+      }
+    } ]
+  },
+  "Page" : {
+    "type" : "object",
+    "properties" : {
+      "page" : {
+        "type" : "integer",
+        "example" : 1,
+        "description" : "Current page number."
+      },
+      "limit" : {
+        "type" : "integer",
+        "example" : 10,
+        "description" : "Number of items per page."
+      },
+      "pages" : {
+        "type" : "integer",
+        "example" : 3,
+        "description" : "Number of available pages for given limit."
+      },
+      "total" : {
+        "type" : "integer",
+        "example" : 25,
+        "description" : "Amount of all paginated resources."
+      },
+      "_links" : {
+        "$ref" : "#/Page__links"
+      }
+    },
+    "description" : "Generic page object."
+  },
+  "ProductReviewsPage" : {
+    "allOf" : [ {
+      "$ref" : "../swagger.json#/definitions/Page"
+    }, {
+      "type" : "object",
+      "properties" : {
+        "title" : {
+          "type" : "string",
+          "example" : "Nice mug"
+        },
+        "rating" : {
+          "type" : "integer",
+          "example" : 5
+        },
+        "createdAt" : {
+          "type" : "string",
+          "example" : "2016-01-02 21:00:10"
+        },
+        "comment" : {
+          "type" : "string",
+          "example" : "It is a really nice mug."
+        },
+        "author" : {
+          "type" : "string",
+          "example" : "example@shop.com"
+        }
+      }
+    } ]
+  },
+  "Price" : {
+    "type" : "object",
+    "properties" : {
+      "current" : {
+        "type" : "integer",
+        "example" : 1000,
+        "description" : "Calculated price for given channel. Price is stored as an integer, so by default it should be divided by 100."
+      },
+      "currency" : {
+        "type" : "string",
+        "example" : "PLN"
+      }
+    }
+  },
+  "EstimatedShippingCost" : {
+    "type" : "object",
+    "properties" : {
+      "price" : {
+        "$ref" : "#/Price"
+      }
+    }
+  },
+  "Address" : {
+    "type" : "object",
+    "properties" : {
+      "firstName" : {
+        "type" : "string",
+        "example" : "Sherlock"
+      },
+      "lastName" : {
+        "type" : "string",
+        "example" : "Holmes"
+      },
+      "countryCode" : {
+        "type" : "string",
+        "example" : "GB"
+      },
+      "street" : {
+        "type" : "string",
+        "example" : "Baker Street 221b"
+      },
+      "city" : {
+        "type" : "string",
+        "example" : "London"
+      },
+      "postcode" : {
+        "type" : "string",
+        "example" : "NW1"
+      },
+      "provinceName" : {
+        "type" : "string",
+        "example" : "Greater London"
+      },
+      "company" : {
+        "type" : "string",
+        "example" : "Holmes Investigation Service"
+      },
+      "phoneNumber" : {
+        "type" : "string",
+        "example" : "+490000000000"
+      }
+    }
+  },
+  "PaymentMethod" : {
+    "type" : "object",
+    "properties" : {
+      "code" : {
+        "type" : "string",
+        "example" : "PBC"
+      },
+      "name" : {
+        "type" : "string",
+        "example" : "Pay by check"
+      },
+      "description" : {
+        "type" : "string",
+        "example" : "Some strange description."
+      },
+      "instructions" : {
+        "type" : "string",
+        "example" : "Some instructions."
+      }
+    }
+  },
+  "ShippingMethod" : {
+    "type" : "object",
+    "properties" : {
+      "code" : {
+        "type" : "string",
+        "example" : "DHL"
+      },
+      "name" : {
+        "type" : "string",
+        "example" : "DHL Delivery"
+      },
+      "description" : {
+        "type" : "string",
+        "example" : "DHL Delivery will deliver your parcel even next day!"
+      },
+      "price" : {
+        "$ref" : "#/Price"
+      }
+    }
+  },
+  "RequestPasswordResetting" : {
+    "type" : "object",
+    "properties" : {
+      "email" : {
+        "type" : "string",
+        "example" : "test@example.com"
+      }
+    }
+  },
+  "PasswordResetRequest" : {
+    "type" : "object",
+    "properties" : {
+      "password" : {
+        "$ref" : "#/PasswordReset"
+      }
+    }
+  },
+  "PasswordReset" : {
+    "type" : "object",
+    "properties" : {
+      "first" : {
+        "type" : "string",
+        "example" : "a-new-password"
+      },
+      "second" : {
+        "type" : "string",
+        "example" : "a-new-password"
+      }
+    }
+  },
+  "RegisterRequest" : {
+    "type" : "object",
+    "properties" : {
+      "email" : {
+        "type" : "string",
+        "example" : "test@example.com"
+      },
+      "plainPassword" : {
+        "type" : "string",
+        "example" : "test12334verysecure"
+      },
+      "firstName" : {
+        "type" : "string",
+        "example" : "Sherlock"
+      },
+      "lastName" : {
+        "type" : "string",
+        "example" : "Holmes"
+      },
+      "channel" : {
+        "type" : "string",
+        "example" : "WEB_GB"
+      }
+    }
+  },
+  "LoginRequest" : {
+    "type" : "object",
+    "properties" : {
+      "email" : {
+        "type" : "string",
+        "example" : "test@example.com"
+      },
+      "password" : {
+        "type" : "string",
+        "example" : "test12334verysecure"
+      }
+    }
+  },
+  "UpdateUserRequest" : {
+    "type" : "object",
+    "properties" : {
+      "firstName" : {
+        "type" : "string",
+        "example" : "Sherlock"
+      },
+      "lastName" : {
+        "type" : "string",
+        "example" : "Holmes"
+      },
+      "email" : {
+        "type" : "string",
+        "example" : "sherlock@holmes.com"
+      },
+      "birthday" : {
+        "type" : "string",
+        "example" : "2017-08-12"
+      },
+      "gender" : {
+        "type" : "string",
+        "example" : "f"
+      },
+      "phoneNumber" : {
+        "type" : "string",
+        "example" : "+490000000000"
+      },
+      "subscribedToNewsletter" : {
+        "type" : "integer",
+        "example" : 0
+      }
+    }
+  },
+  "LoggedInCustomerDetails" : {
+    "type" : "object",
+    "properties" : {
+      "firstName" : {
+        "type" : "string",
+        "example" : "Sherlock"
+      },
+      "lastName" : {
+        "type" : "string",
+        "example" : "Holmes"
+      },
+      "email" : {
+        "type" : "string",
+        "example" : "sherlock@holmes.com"
+      },
+      "birthday" : {
+        "type" : "string",
+        "example" : "2017-08-12"
+      },
+      "gender" : {
+        "type" : "string",
+        "example" : "m"
+      },
+      "phoneNumber" : {
+        "type" : "string",
+        "example" : "+490000000000"
+      },
+      "subscribedToNewsletter" : {
+        "type" : "boolean",
+        "example" : false
+      }
+    }
+  },
+  "LoggedInCustomerAddressBook" : {
+    "type" : "array",
+    "items" : {
+      "type" : "object",
+      "allOf" : [ {
+        "$ref" : "#/definitions/LoggedInCustomerAddressBookAddress"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "default" : {
+            "type" : "boolean",
+            "example" : false
+          }
+        }
+      } ]
+    }
+  },
+  "LoggedInCustomerAddressBookAddress" : {
+    "type" : "object",
+    "properties" : {
+      "id" : {
+        "type" : "integer",
+        "example" : 1
+      },
+      "firstName" : {
+        "type" : "string",
+        "example" : "Sherlock"
+      },
+      "lastName" : {
+        "type" : "string",
+        "example" : "Holmes"
+      },
+      "countryCode" : {
+        "type" : "string",
+        "example" : "GB"
+      },
+      "street" : {
+        "type" : "string",
+        "example" : "Baker Street 221b"
+      },
+      "city" : {
+        "type" : "string",
+        "example" : "London"
+      },
+      "postcode" : {
+        "type" : "string",
+        "example" : "NW1"
+      },
+      "provinceName" : {
+        "type" : "string",
+        "example" : "Greater London"
+      },
+      "provinceCode" : {
+        "type" : "string",
+        "example" : "GB_gl"
+      },
+      "company" : {
+        "type" : "string",
+        "example" : "Holmes Investigation Service"
+      },
+      "phoneNumber" : {
+        "type" : "string",
+        "example" : "+490000000000"
+      }
+    }
+  },
+  "TotalsView" : {
+    "type" : "object",
+    "properties" : {
+      "total" : {
+        "type" : "integer",
+        "example" : 0,
+        "description" : "Total cost of the cart. The sum of all properties below."
+      },
+      "items" : {
+        "type" : "integer",
+        "example" : 0,
+        "description" : "Total cost of the cart items."
+      },
+      "taxes" : {
+        "type" : "integer",
+        "example" : 0,
+        "description" : "Total amount of cart taxes."
+      },
+      "shipping" : {
+        "type" : "integer",
+        "example" : 0,
+        "description" : "Total cost of the cart shipment."
+      },
+      "promotion" : {
+        "type" : "integer",
+        "example" : 0,
+        "description" : "Total amount of cart promotions."
+      }
+    }
+  },
+  "LoginSuccess" : {
+    "type" : "object",
+    "properties" : {
+      "token" : {
+        "type" : "string",
+        "example" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9"
+      }
+    },
+    "description" : "User was logged in."
+  },
+  "PlacedOrder" : {
+    "type" : "object",
+    "properties" : {
+      "tokenValue" : {
+        "type" : "string",
+        "example" : "SDAOSLEFNWU35H3QLI5325"
+      },
+      "channel" : {
+        "type" : "string",
+        "example" : "WEB_GB"
+      },
+      "currency" : {
+        "type" : "string",
+        "example" : "GBP",
+        "description" : "Code of the cart currency according to ISO 4217. This value is inherited from channel"
+      },
+      "locale" : {
+        "type" : "string",
+        "example" : "en_GB",
+        "description" : "Code of the order locale. This value is inherited from channel"
+      },
+      "checkoutState" : {
+        "type" : "string",
+        "description" : "Current state of a checkout.",
+        "enum" : [ "cart", "new", "fulfilled", "cancelled" ],
+        "default" : "cart"
+      },
+      "checkoutCompletedAt" : {
+        "type" : "string",
+        "format" : "date-time",
+        "description" : "Date the order was completed in ISO 8601 format."
+      },
+      "items" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/Item"
+        }
+      },
+      "totals" : {
+        "$ref" : "#/TotalsView"
+      },
+      "shippingAddress" : {
+        "$ref" : "#/Address"
+      },
+      "billingAddress" : {
+        "$ref" : "#/Address"
+      },
+      "payments" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/Payment"
+        }
+      },
+      "shipments" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/Shipment"
+        }
+      },
+      "cartDiscounts" : {
+        "type" : "array",
+        "items" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/Discount"
+          }
+        }
+      }
+    },
+    "description" : "Placed order with information about items, current state, totals and more."
+  },
+  "GeneralError" : {
+    "type" : "object",
+    "properties" : {
+      "code" : {
+        "type" : "integer",
+        "example" : 400
+      },
+      "message" : {
+        "type" : "string",
+        "example" : "Validation failed"
+      },
+      "errors" : {
+        "type" : "object",
+        "description" : "Keys reference to the fields where the error occurred.",
+        "additionalProperties" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "sylius.shop_api.additionalProp.not_null"
+          }
+        }
+      }
+    }
+  },
+  "AvailableShippingMethods_shipments" : {
+    "properties" : {
+      "methods" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "$ref" : "#/ShippingMethod"
+        }
+      }
+    }
+  },
+  "AvailablePaymentMethods_payments" : {
+    "properties" : {
+      "methods" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "$ref" : "#/PaymentMethod"
+        }
+      }
+    }
+  },
+  "Page__links" : {
+    "properties" : {
+      "self" : {
+        "type" : "string",
+        "example" : "/shop-api/some-path?page=1&limit=10",
+        "description" : "Link to the current page."
+      },
+      "first" : {
+        "type" : "string",
+        "example" : "/shop-api/some-path?page=1&limit=10",
+        "description" : "Link to the fist page."
+      },
+      "last" : {
+        "type" : "string",
+        "example" : "/shop-api/some-path?page=1&limit=10",
+        "description" : "Link to the last page."
+      },
+      "next" : {
+        "type" : "string",
+        "example" : "/shop-api/some-path?page=1&limit=10",
+        "description" : "Link to the next page."
+      }
+    }
+  }
+}

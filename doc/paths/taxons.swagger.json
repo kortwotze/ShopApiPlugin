@@ -1,0 +1,57 @@
+{
+  "get-available-taxons" : {
+    "get" : {
+      "tags" : [ "taxons" ],
+      "summary" : "Show taxon tree.",
+      "description" : "This endpoint will return an array of all available taxon roots with all of its children.",
+      "operationId" : "taxonTree",
+      "parameters" : [ {
+        "name" : "locale",
+        "in" : "query",
+        "description" : "Locale in which taxons should be shown.",
+        "required" : false,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "Array of all available taxons.",
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "../definitions/definitions.swagger.json#/Taxon"
+            }
+          }
+        }
+      }
+    }
+  },
+  "get-taxon-by-code" : {
+    "get" : {
+      "tags" : [ "taxons" ],
+      "summary" : "Show taxon with given code.",
+      "description" : "This endpoint will return a taxon with given code, children and the root node with direct path to this taxon.",
+      "operationId" : "taxonDetails",
+      "parameters" : [ {
+        "name" : "code",
+        "in" : "path",
+        "description" : "Code of expected taxon.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "name" : "locale",
+        "in" : "query",
+        "description" : "Locale in which taxons should be shown.",
+        "required" : false,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "Requested taxon with children.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/TaxonDetails"
+          }
+        }
+      }
+    }
+  }
+}

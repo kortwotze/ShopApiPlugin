@@ -1,0 +1,239 @@
+{
+  "checkout-by-token" : {
+    "get" : {
+      "tags" : [ "checkout" ],
+      "summary" : "Show checkout summary",
+      "description" : "This endpoint will show the summarized cart during checkout. This action is an equivalent of cart summarize action.",
+      "operationId" : "checkoutSummarize",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "Current state of the cart, with calculated prices and related items.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/Cart"
+          }
+        },
+        "400" : {
+          "description" : "Invalid input (E.g. token has not been found)",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "manage-checkout-address" : {
+    "put" : {
+      "tags" : [ "checkout" ],
+      "summary" : "Address cart.",
+      "description" : "This endpoint will allow you to add billing and shipping addresses to the cart and begin the checkout process. You can either define the same shipping and billing address or specify them separately.",
+      "operationId" : "checkoutAddress",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/CheckoutAddressRequest"
+        }
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Cart has been addressed."
+        },
+        "400" : {
+          "description" : "Address not valid",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "get-available-shipping-methods" : {
+    "get" : {
+      "tags" : [ "checkout" ],
+      "summary" : "Get available shipping methods.",
+      "description" : "This endpoint will show you available shipping methods for all cart shipments.",
+      "operationId" : "checkoutShowAvailableShippingMethods",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "Get available shipping methods.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/AvailableShippingMethods"
+          }
+        },
+        "400" : {
+          "description" : "Invalid input, validation failed.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "select-shipping-method" : {
+    "put" : {
+      "tags" : [ "checkout" ],
+      "summary" : "Choosing a cart shipping method.",
+      "description" : "This endpoint will allow you to choose a cart shipping method.",
+      "operationId" : "checkoutChooseShippingMethod",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "name" : "id",
+        "in" : "path",
+        "description" : "Order number of shipment for which shipping method should be specified.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/CheckoutChooseShippingMethodRequest"
+        }
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Shipping method has been chosen."
+        },
+        "400" : {
+          "description" : "Invalid input, validation failed.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "get-available-payment-methods" : {
+    "get" : {
+      "tags" : [ "checkout" ],
+      "summary" : "Get available payment methods.",
+      "description" : "This endpoint will show you available payment methods for all cart payments.",
+      "operationId" : "checkoutShowAvailablePaymentMethods",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "Get available payment methods.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/AvailablePaymentMethods"
+          }
+        },
+        "400" : {
+          "description" : "Invalid input, validation failed.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "select-payment-method" : {
+    "put" : {
+      "tags" : [ "checkout" ],
+      "summary" : "Choosing cart payment method.",
+      "description" : "This endpoint will allow you to choose cart a payment method.",
+      "operationId" : "checkoutChoosePaymentMethod",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "name" : "id",
+        "in" : "path",
+        "description" : "Order number of payment for which payment method should be specified.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/CheckoutChoosePaymentMethodRequest"
+        }
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Payment method has been chosen."
+        },
+        "400" : {
+          "description" : "Invalid input, validation failed.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "complete-checkout" : {
+    "put" : {
+      "tags" : [ "checkout" ],
+      "summary" : "Completing checkout.",
+      "description" : "This endpoint will allow you to complete the checkout.",
+      "operationId" : "checkoutComplete",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/CheckoutCompleteRequest"
+        }
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Checkout has been completed."
+        },
+        "400" : {
+          "description" : "Invalid input, validation failed.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        },
+        "403" : {
+          "description" : "Not logged in or wrong email"
+        }
+      },
+      "security" : [ {
+        "bearerAuth" : [ ]
+      } ]
+    }
+  }
+}

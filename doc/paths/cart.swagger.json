@@ -1,0 +1,317 @@
+{
+  "pickup-cart" : {
+    "post" : {
+      "tags" : [ "cart" ],
+      "summary" : "Pick up your cart from the store",
+      "description" : "This endpoint will allow you to create a new cart.",
+      "operationId" : "cartPickUp",
+      "parameters" : [ ],
+      "responses" : {
+        "201" : {
+          "description" : "Cart has been picked up",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/Cart"
+          }
+        },
+        "400" : {
+          "description" : "Invalid input",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "manage-single-cart" : {
+    "get" : {
+      "tags" : [ "cart" ],
+      "summary" : "Show summarized cart.",
+      "description" : "This endpoint shows you the current calculated state of cart.",
+      "operationId" : "cartSummarize",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "Current state of the cart, with calculated prices and related items.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/Cart"
+          }
+        },
+        "400" : {
+          "description" : "Invalid input (E.g. token has not been found)",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    },
+    "delete" : {
+      "tags" : [ "cart" ],
+      "summary" : "Drop your cart.",
+      "description" : "This endpoint will remove the cart and all of the related cart items.",
+      "operationId" : "cartDrop",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Cart has been dropped."
+        },
+        "400" : {
+          "description" : "Invalid input (E.g. token has not been found)",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "add-item-to-cart" : {
+    "post" : {
+      "tags" : [ "cart" ],
+      "summary" : "Add an item to your cart.",
+      "description" : "This endpoint will allow you to add a new item to your cart.",
+      "operationId" : "cartAddItem",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "in" : "body",
+        "name" : "content",
+        "description" : "Description of an item. The smallest required amount of data is a product code and quantity for a simple product. Configurable products will require an additional `variant_code` or `options` field, but never both.",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/PutItemToCartRequest"
+        }
+      } ],
+      "responses" : {
+        "201" : {
+          "description" : "Item has been added to the cart",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/Cart"
+          }
+        },
+        "400" : {
+          "description" : "Invalid input, validation failed.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "add-items-to-cart" : {
+    "post" : {
+      "tags" : [ "cart" ],
+      "summary" : "Add multiple items to your cart.",
+      "description" : "This endpoint will allow you to add a new item to your cart.",
+      "operationId" : "cartPutItems",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "in" : "body",
+        "name" : "content",
+        "description" : "Description of items. The same rules applied to each of the array values as to the previous point.",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/PutItemsToCartRequest"
+        }
+      } ],
+      "responses" : {
+        "201" : {
+          "description" : "Item has been added to the cart",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/Cart"
+          }
+        },
+        "400" : {
+          "description" : "Invalid input, validation failed.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "manage-single-cart-item" : {
+    "put" : {
+      "tags" : [ "cart" ],
+      "summary" : "Change quantity of a cart item.",
+      "operationId" : "cartUpdateItem",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "name" : "identifier",
+        "in" : "path",
+        "description" : "Identifier of a specific item. Can be found in the cart summary.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/ChangeItemQuantityRequest"
+        }
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Quantity has been changed."
+        },
+        "400" : {
+          "description" : "Invalid input, validation failed.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    },
+    "delete" : {
+      "tags" : [ "cart" ],
+      "summary" : "Remove cart item.",
+      "description" : "This endpoint will remove one item from your cart",
+      "operationId" : "cartDeleteItem",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "name" : "identifier",
+        "in" : "path",
+        "description" : "Identifier of a specific item. Can be found in the cart summary.",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Cart item has been removed."
+        },
+        "400" : {
+          "description" : "Invalid input (E.g. token has not been found)",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "estimated-shipping-cost" : {
+    "get" : {
+      "tags" : [ "cart" ],
+      "summary" : "Estimates the shipping cost of the cart",
+      "operationId" : "estimateShippingCost",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "name" : "countryCode",
+        "in" : "query",
+        "description" : "Shipping Country",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "name" : "provinceCode",
+        "in" : "query",
+        "description" : "Province to ship to",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "200" : {
+          "description" : "Price was calculated",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/EstimatedShippingCost"
+          }
+        },
+        "400" : {
+          "description" : "Invalid input (E.g. token has not been found)",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  },
+  "manage-cart-coupons" : {
+    "put" : {
+      "tags" : [ "cart" ],
+      "summary" : "Add a promotion coupon code to the cart.",
+      "description" : "This endpoint will allow you to add a promotion coupon code to the cart and receive the discount.",
+      "operationId" : "cartAddCoupon",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      }, {
+        "in" : "body",
+        "name" : "content",
+        "required" : true,
+        "schema" : {
+          "$ref" : "../definitions/definitions.swagger.json#/AddCouponRequest"
+        }
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Coupon has been assigned to the cart."
+        },
+        "400" : {
+          "description" : "Invalid input, validation failed.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    },
+    "delete" : {
+      "tags" : [ "cart" ],
+      "summary" : "Remove a promotion coupon code from the cart.",
+      "description" : "This endpoint will allow you to remove a promotion coupon code from the cart.",
+      "operationId" : "cartRemoveCoupon",
+      "parameters" : [ {
+        "name" : "token",
+        "in" : "path",
+        "description" : "Cart identifier.",
+        "required" : true,
+        "type" : "string"
+      } ],
+      "responses" : {
+        "204" : {
+          "description" : "Coupon has been removed from the cart."
+        },
+        "400" : {
+          "description" : "Invalid input, validation failed.",
+          "schema" : {
+            "$ref" : "../definitions/definitions.swagger.json#/GeneralError"
+          }
+        }
+      }
+    }
+  }
+}
